@@ -12,7 +12,7 @@ public class CircularQueue<T>
 
     public CircularQueue(int capacity = DefaultCapacity)
     {
-		data = new T[DefaultCapacity];
+		data = new T[capacity];
 	    Count = 0;
 	    endIndex = 0;
 	    startIndex = 0;
@@ -20,20 +20,22 @@ public class CircularQueue<T>
 
     public void Enqueue(T element)
     {
-	   
-	    if(Count >= data.Length)
+
+	    if (Count >= data.Length)
 	    {
 			Resize();
-		}
-	 
+	    }
+		
 	    data[endIndex] = element;
-	    endIndex = (endIndex + 1) % data.Length;
-		Count++;
+		endIndex = (endIndex + 1) % data.Length;
+
+	    Count++;
+
     }
 
     private void Resize()
     {
-        T[] newArr = new T[DefaultCapacity*2];
+		T[] newArr = new T[data.Length * 2];
 		CopyAllElements(newArr);
 	    data = newArr;
 	    startIndex = 0;
@@ -42,41 +44,41 @@ public class CircularQueue<T>
 
     private void CopyAllElements(T[] newArray)
     {
-	    int currentStartIndex = startIndex;
-	    int currentIndex = 0;
-	    while (currentIndex < Count)
+	    int start = startIndex;
+	    for (int i = 0;i < Count;i++)
 	    {
-		    newArray[currentIndex] = data[currentStartIndex];
-		    currentStartIndex = (currentStartIndex + 1) % data.Length;
-		    currentIndex++;
+		    newArray[i] = data[start];
+		    start = (start + 1) % data.Length;
 	    }
     }
 
     // Should throw InvalidOperationException if the queue is empty
     public T Dequeue()
     {
-	    if (this.Count == 0)
+	    if (Count == 0)
 	    {
-			throw new InvalidOperationException();
+			throw new InvalidOperationException("The queue is empty");
 	    }
 
-	    T result = data[startIndex];
+	    T toRemove = data[startIndex];
 	    startIndex = (startIndex + 1) % data.Length;
 	    Count--;
-	    return result;
+
+	 
+	    return toRemove;
     }
 
     public T[] ToArray()
     {
-        T[] newArr = new T[data.Length];
-	    int dataStart = startIndex;
-	    for (int i = 0; i < newArr.Length; i++)
+	    T[] arr = new T[Count];
+	    int start = startIndex;
+	    for (int i = 0;i < Count;i++)
 	    {
-		    newArr[i] = data[dataStart];
-		    dataStart = (dataStart + 1) % data.Length;
+		    arr[i] = data[start];
+		    start = (start + 1) % data.Length;
 	    }
 
-	    return newArr;
+	    return arr;
     }
 }
 
