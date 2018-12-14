@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class PlayWithTrees
 {
@@ -24,7 +25,15 @@ public class PlayWithTrees
 
         Console.WriteLine();
 
-        var binaryTree =
+	    Console.WriteLine("OrderDFS: ");
+	    var nums = tree.OrderDFS();
+	    Console.WriteLine(string.Join(" ",nums));
+
+	    Console.WriteLine("OrderBFS: ");
+	    var bfs = tree.OrderBFS();
+	    Console.WriteLine(string.Join(" ",bfs));
+
+	    var binaryTree =
             new BinaryTree<string>("*",
                 new BinaryTree<string>("+",
                     new BinaryTree<string>("3"),
@@ -36,12 +45,12 @@ public class PlayWithTrees
         Console.WriteLine("Binary tree (indented, pre-order):");
         binaryTree.PrintIndentedPreOrder();
 
-        Console.Write("Binary tree nodes (in-order):");
+        /*Console.Write("Binary tree nodes (in-order):");
         binaryTree.EachInOrder(c => Console.Write(" " + c));
         Console.WriteLine();
 
         Console.Write("Binary tree nodes (post-order):");
         binaryTree.EachPostOrder(c => Console.Write(" " + c));
-        Console.WriteLine();
+        Console.WriteLine();*/
     }
 }
