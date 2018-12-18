@@ -126,7 +126,6 @@ public class BinarySearchTree<T> where T : IComparable<T>
 		    current = current.Left;
 	    }
 
-	    Console.WriteLine("MinElement = " + current.Value);
 	    if (current.Right == null)
 	    {
 		    parent.Left = null;
