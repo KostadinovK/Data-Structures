@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 
 public class BinarySearchTree<T> where T : IComparable<T>
@@ -17,9 +18,33 @@ public class BinarySearchTree<T> where T : IComparable<T>
 			this.Left = null;
 			this.Right = null;
 		}
+
+
 	}
 
 	private Node root;
+
+	public BinarySearchTree()
+	{
+	}
+
+	private BinarySearchTree(Node node)
+	{
+		Copy(node);
+	}
+
+	private void Copy(Node node)
+	{
+		if (node == null)
+		{
+			return;
+		}
+
+
+		Insert(node.Value);
+		Copy(node.Left);
+		Copy(node.Right);
+	}
 
 	public void Insert(T value)
 	{
@@ -116,15 +141,76 @@ public class BinarySearchTree<T> where T : IComparable<T>
 
 	public BinarySearchTree<T> Search(T item)
     {
-        throw new NotImplementedException();
+	    if (root == null)
+	    {
+		    return null;
+	    }
+
+	    Node current = root;
+	    while (current != null)
+	    {
+		    int compareResult = current.Value.CompareTo(item);
+
+		    if (compareResult > 0)
+		    {
+			    current = current.Left;
+		    }else if (compareResult < 0)
+		    {
+			    current = current.Right;
+		    }
+		    else
+		    {
+				return new BinarySearchTree<T>(current);
+		    }
+	    }
+
+	    return null;
     }
 
-    public IEnumerable<T> Range(T startRange, T endRange)
-    {
-        throw new NotImplementedException();
-    }
+	public IEnumerable<T> Range(T startRange, T endRange)
+	{
+		if (root == null)
+		{
+			return null;
+		}
 
-    public void EachInOrder(Action<T> action)
+		List<T> result = new List<T>();
+
+		Range(startRange,endRange,result,root);
+
+		return result;
+	}
+
+	private void Range(T startRange, T endRange, List<T> result, Node node)
+	{
+		if (node == null)
+		{
+			return;
+		}
+
+		int startCompareResult = node.Value.CompareTo(startRange);
+		int endCompareResult = node.Value.CompareTo(endRange);
+
+		if (startCompareResult >= 0)
+		{
+			Range(startRange, endRange, result, node.Left);
+		}
+
+		
+
+		if (startCompareResult >= 0 && endCompareResult <= 0)
+		{
+			result.Add(node.Value);
+		}
+
+		if (endCompareResult <= 0)
+		{
+			Range(startRange, endRange, result, node.Right);
+		}
+		
+	}
+
+	public void EachInOrder(Action<T> action)
     {
 	    if (root == null)
 	    {
@@ -151,15 +237,24 @@ public class Launcher
 {
     public static void Main(string[] args)
     {
-        BinarySearchTree<int> tree = new BinarySearchTree<int>();
+		BinarySearchTree<int> bst = new BinarySearchTree<int>();
 
-		tree.Insert(8);
-		tree.Insert(7);
-		tree.Insert(3);
-		tree.Insert(4);
-		tree.Insert(5);
-	    
-		tree.DeleteMin();
-	    tree.EachInOrder(x => Console.WriteLine(x));
-	}
+	    bst.Insert(10);
+	    bst.Insert(5);
+	    bst.Insert(3);
+	    bst.Insert(1);
+	    bst.Insert(4);
+	    bst.Insert(8);
+	    bst.Insert(9);
+	    bst.Insert(37);
+	    bst.Insert(39);
+	    bst.Insert(45);
+
+	    var nums = bst.Range(4, 37);
+
+	    foreach (var num in nums)
+	    {
+		    Console.WriteLine("------" + num + "----");
+	    }
+    }
 }
