@@ -10,22 +10,20 @@ public class Program
 	public static void Main()
 	{
 		ReadTree();
-		Tree<int> root = tree.FirstOrDefault(x => x.Value.Parent == null).Value;
-		List<Tree<int>> leafs = GetTreeLeafs();
-		
-		Console.WriteLine("Leaf nodes: " + string.Join(" ", leafs.Select(x => x.Value).OrderBy(x => x)));
+		List<Tree<int>> middleNodes = tree.Values.Where(x => x.Parent != null && x.Children.Count > 0).OrderBy(x => x.Value).ToList();
+		Console.WriteLine("Middle nodes: " + string.Join(" ",middleNodes.Select(x => x.Value)));
 	}
 
 	private static void ReadTree()
 	{
 		int nodesCount = int.Parse(Console.ReadLine());
 
-		for (int i = 1;i < nodesCount;i++)
+		for (int i = 1; i < nodesCount;i++)
 		{
-			int[] nodes = Console.ReadLine().Split().Select(int.Parse).ToArray();
+			int[] nodesValues = Console.ReadLine().Split().Select(int.Parse).ToArray();
 
-			int parentValue = nodes[0];
-			int childValue = nodes[1];
+			int parentValue = nodesValues[0];
+			int childValue = nodesValues[1];
 
 			if (!tree.ContainsKey(parentValue))
 			{
@@ -34,7 +32,7 @@ public class Program
 
 			if (!tree.ContainsKey(childValue))
 			{
-				tree.Add(childValue, new Tree<int>(childValue));
+				tree.Add(childValue,new Tree<int>(childValue));
 			}
 
 			Tree<int> parent = tree[parentValue];
@@ -42,13 +40,8 @@ public class Program
 
 			parent.Children.Add(child);
 			child.Parent = parent;
-		}
-	}
 
-	private static List<Tree<int>> GetTreeLeafs()
-	{
-		List<Tree<int>> leafs = tree.Values.Where(x => x.Children.Count == 0).ToList();
-		return leafs;
+		}
 	}
 }
 

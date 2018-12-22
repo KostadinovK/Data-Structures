@@ -4,17 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+public class Tree<T>
+{
+	public T Value { get; set; }
+	public Tree<T> Parent { get; set; }
+	public List<Tree<T>> Children { get; set; }
+
+	public Tree(T value, params Tree<T>[] children)
+	{
+		this.Value = value;
+		this.Children = new List<Tree<T>>(children);
+	}
+
+
+	
+}
+
 public class Program
 {
-	static Dictionary<int, Tree<int>> tree = new Dictionary<int, Tree<int>>();
+	static Dictionary<int,Tree<int>> tree = new Dictionary<int, Tree<int>>();
+
 	public static void Main()
 	{
 		ReadTree();
 		Tree<int> root = tree.FirstOrDefault(x => x.Value.Parent == null).Value;
-		List<Tree<int>> leafs = GetTreeLeafs();
-		
-		Console.WriteLine("Leaf nodes: " + string.Join(" ", leafs.Select(x => x.Value).OrderBy(x => x)));
+		Tree<int> deepestNode = GetDeepestNode(root);
+		Console.WriteLine("Deepest node: " + deepestNode.Value);
 	}
+
 
 	private static void ReadTree()
 	{
@@ -45,22 +62,21 @@ public class Program
 		}
 	}
 
-	private static List<Tree<int>> GetTreeLeafs()
+	public static Tree<int> GetDeepestNode(Tree<int> root)
 	{
-		List<Tree<int>> leafs = tree.Values.Where(x => x.Children.Count == 0).ToList();
-		return leafs;
-	}
-}
+		Queue<Tree<int>> nodes = new Queue<Tree<int>>();
+		nodes.Enqueue(root);
+		Tree<int> current = null;
+		while (nodes.Count > 0)
+		{
+			current = nodes.Dequeue();
+			for (int i = current.Children.Count-1;i >= 0;i--)
+			{
+				nodes.Enqueue(current.Children[i]);
+			}
 
-public class Tree<T>
-{
-	public T Value { get; set; }
-	public Tree<T> Parent { get; set; }
-	public List<Tree<T>> Children { get; set; }
+		}
 
-	public Tree(T value, params Tree<T>[] children)
-	{
-		this.Value = value;
-		this.Children = new List<Tree<T>>(children);
+		return current;
 	}
 }
