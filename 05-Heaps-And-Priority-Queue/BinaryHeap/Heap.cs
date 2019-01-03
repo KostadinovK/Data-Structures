@@ -10,12 +10,10 @@ public static class Heap<T> where T : IComparable<T>
 		    HeapifyDown(i,arr,arr.Length);
 	    }
 
-	    int lenght = arr.Length;
 	    for (int i = arr.Length - 1;i >= 1;i--)
 	    {
 			Swap(0,i,arr);
-			HeapifyDown(0,arr,lenght-1);
-		    lenght--;
+			HeapifyDown(0,arr,i);
 	    }
 
     }
