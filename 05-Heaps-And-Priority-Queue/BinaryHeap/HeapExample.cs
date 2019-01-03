@@ -13,11 +13,15 @@ public class HeapExample
         heap.Insert(12);
         heap.Insert(-4);
 
-        Console.WriteLine("Heap elements (max to min):");
+        /*Console.WriteLine("Heap elements (max to min):");
         while (heap.Count > 0)
         {
             var max = heap.Pull();
             Console.WriteLine(max);
-        }
+        }*/
+
+	    int[] arr = { 5, 8, 1, 3, 12, 2, -3 };
+		Heap<int>.Sort(arr);
+	    Console.WriteLine(string.Join(" ",arr));
     }
 }
