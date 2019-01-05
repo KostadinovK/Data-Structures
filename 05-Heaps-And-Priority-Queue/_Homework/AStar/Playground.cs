@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class Playground
 {
@@ -14,7 +15,7 @@ public class Playground
 
     static void Main()
     {
-        // map = ReadMap();
+        //map = ReadMap();
 
         var start = FindGoal('P');
         var goal = FindGoal('*');
@@ -30,10 +31,9 @@ public class Playground
         }
 
         PrintMap();
+	}
 
-    }
-
-    private static char[,] ReadMap()
+	private static char[,] ReadMap()
     {
         var n = int.Parse(Console.ReadLine());
         var map = new char[n, n];
