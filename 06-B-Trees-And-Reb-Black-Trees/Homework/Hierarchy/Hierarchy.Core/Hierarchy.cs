@@ -1,5 +1,7 @@
-﻿namespace Hierarchy.Core
-{
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+
     using System;
     using System.Collections.Generic;
     using System.Collections;
@@ -101,17 +103,57 @@
 
         public void Remove(T element)
         {
-            throw new NotImplementedException();
+            if (!Contains(element))
+            {
+                throw new ArgumentException("Element not in Hierarchy!");
+            }
+
+            Node toRemove = GetNode(element);
+            if (toRemove == Root)
+            {
+                throw new InvalidOperationException("Cannot remove root!");
+            }
+
+            if (toRemove.Children.Count != 0)
+            {
+                foreach (var child in toRemove.Children)
+                {
+                    toRemove.Parent.Children.Add(child);
+                    child.Parent = toRemove.Parent;
+                }
+            }
+
+            toRemove.Parent.Children.Remove(toRemove);
         }
 
         public IEnumerable<T> GetChildren(T item)
         {
-            throw new NotImplementedException();
+            if (!Contains(item))
+            {
+                throw new ArgumentException();
+            }
+
+            List<T> nodes = new List<T>();
+            Node node = GetNode(item);
+
+            return node.Children.Select(x => x.Value).ToList();
         }
 
         public T GetParent(T item)
         {
-            throw new NotImplementedException();
+            if (!Contains(item))
+            {
+                throw new ArgumentException();
+            }
+
+            Node node = GetNode(item);
+
+            if (node == Root)
+            {
+                return default(T);
+            }
+
+            return node.Parent.Value;
         }
 
         public bool Contains(T value)
@@ -137,12 +179,45 @@
 
         public IEnumerable<T> GetCommonElements(Hierarchy<T> other)
         {
-            throw new NotImplementedException();
+            List<Node> commonNodes = new List<Node>();
+
+            Queue<Node> nodes = new Queue<Node>();
+            nodes.Enqueue(other.Root);
+
+            while (nodes.Count > 0)
+            {
+                Node current = nodes.Dequeue();
+
+                if (this.Contains(current.Value))
+                {
+                    commonNodes.Add(current);
+                }
+
+                foreach (var child in current.Children)
+                {
+                    nodes.Enqueue(child);
+                }
+            }
+
+            return commonNodes.Select(x => x.Value).ToList();
         } 
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            Queue<Node> nodes = new Queue<Node>();
+            nodes.Enqueue(Root);
+
+            while (nodes.Count > 0)
+            {
+                Node current = nodes.Dequeue();
+
+                foreach (var child in current.Children)
+                {
+                    nodes.Enqueue(child);
+                }
+
+                yield return current.Value;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -150,4 +225,3 @@
             return this.GetEnumerator();
         }
     }
-}
