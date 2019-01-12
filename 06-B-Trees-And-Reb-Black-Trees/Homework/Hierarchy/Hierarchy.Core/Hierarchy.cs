@@ -26,186 +26,102 @@ using System.Runtime.InteropServices.ComTypes;
             }
         }
 
-        public Node Root { get; set; }
+        private Node root;
+        private Dictionary<T, Node> valueNodesDic;
 
         public Hierarchy(T root)
         {
-            Root = new Node(root);
+            this.root = new Node(root, new Node(default(T)));
+            valueNodesDic = new Dictionary<T, Node>();
+            valueNodesDic.Add(root,this.root);
         }
 
         public int Count
         {
-            get { return GetCount(); }
-        }
-
-        private int GetCount()
-        {
-            if (Root == null)
-            {
-                return 0;
-            }
-
-            int count = 0;
-            Queue<Node> nodes = new Queue<Node>();
-            nodes.Enqueue(Root);
-            while (nodes.Count > 0)
-            {
-                Node current = nodes.Dequeue();
-                count++;
-                foreach (var child in current.Children)
-                {
-                    nodes.Enqueue(child);
-                }
-            }
-
-            return count;
+            get { return valueNodesDic.Count; }
         }
 
         public void Add(T element, T child)
         {
-            if (!Contains(element))
+            if (!valueNodesDic.ContainsKey(element))
             {
                 throw new ArgumentException("Element not in Hierarchy!");
             }
 
-            if (Contains(child))
+            if (valueNodesDic.ContainsKey(child))
             {
                 throw new ArgumentException("No duplicates of child allowed!");
             }
-
-            Node parent = GetNode(element);
-            parent.Children.Add(new Node(child,parent));
-        }
-
-        private Node GetNode(T value)
-        {
-            Node res = null;
-
-            Queue<Node> nodes = new Queue<Node>();
-            nodes.Enqueue(Root);
-            while (nodes.Count > 0)
-            {
-                Node current = nodes.Dequeue();
-                if (current.Value.Equals(value))
-                {
-                    res = current;
-                    break;
-                }
-
-                foreach (var child in current.Children)
-                {
-                    nodes.Enqueue(child);
-
-                }
-            }
-            return res;
+            valueNodesDic.Add(child,new Node(child,valueNodesDic[element]));
+            valueNodesDic[element].Children.Add(valueNodesDic[child]);
         }
 
         public void Remove(T element)
         {
-            if (!Contains(element))
+            if (!valueNodesDic.ContainsKey(element))
             {
                 throw new ArgumentException("Element not in Hierarchy!");
             }
-
-            Node toRemove = GetNode(element);
-            if (toRemove == Root)
+            
+            if (valueNodesDic[element].Parent.Value.Equals(default(T)))
             {
                 throw new InvalidOperationException("Cannot remove root!");
             }
 
+            Node toRemove = valueNodesDic[element];
+            toRemove.Parent.Children.Remove(toRemove);
+
             if (toRemove.Children.Count != 0)
             {
+                toRemove.Parent.Children.AddRange(toRemove.Children);
                 foreach (var child in toRemove.Children)
                 {
-                    toRemove.Parent.Children.Add(child);
                     child.Parent = toRemove.Parent;
                 }
             }
 
-            toRemove.Parent.Children.Remove(toRemove);
+            valueNodesDic.Remove(element);
         }
 
         public IEnumerable<T> GetChildren(T item)
         {
-            if (!Contains(item))
+            if (!valueNodesDic.ContainsKey(item))
             {
                 throw new ArgumentException();
             }
 
-            List<T> nodes = new List<T>();
-            Node node = GetNode(item);
-
-            return node.Children.Select(x => x.Value).ToList();
+            return valueNodesDic[item].Children.Select(x => x.Value).ToList();
         }
 
         public T GetParent(T item)
         {
-            if (!Contains(item))
+            if (!valueNodesDic.ContainsKey(item))
             {
                 throw new ArgumentException();
             }
 
-            Node node = GetNode(item);
-
-            if (node == Root)
-            {
-                return default(T);
-            }
-
-            return node.Parent.Value;
+            return valueNodesDic[item].Parent.Value;
         }
 
         public bool Contains(T value)
         {
-            Queue<Node> nodes = new Queue<Node>();
-            nodes.Enqueue(Root);
-            while (nodes.Count > 0)
-            {
-                Node current = nodes.Dequeue();
-                if (current.Value.Equals(value))
-                {
-                    return true;
-                }
-
-                foreach (var child in current.Children)
-                {
-                    nodes.Enqueue(child);
-                }
-            }
-
-            return false;
+            return valueNodesDic.ContainsKey(value);
         }
 
         public IEnumerable<T> GetCommonElements(Hierarchy<T> other)
         {
-            List<Node> commonNodes = new List<Node>();
+            HashSet<T> h1 = new HashSet<T>(this.valueNodesDic.Keys);
+            HashSet<T> h2 = new HashSet<T>(other.valueNodesDic.Keys);
 
-            Queue<Node> nodes = new Queue<Node>();
-            nodes.Enqueue(other.Root);
+            h1.IntersectWith(h2);
 
-            while (nodes.Count > 0)
-            {
-                Node current = nodes.Dequeue();
-
-                if (this.Contains(current.Value))
-                {
-                    commonNodes.Add(current);
-                }
-
-                foreach (var child in current.Children)
-                {
-                    nodes.Enqueue(child);
-                }
-            }
-
-            return commonNodes.Select(x => x.Value).ToList();
+            return h1;
         } 
 
         public IEnumerator<T> GetEnumerator()
         {
             Queue<Node> nodes = new Queue<Node>();
-            nodes.Enqueue(Root);
+            nodes.Enqueue(root);
 
             while (nodes.Count > 0)
             {
