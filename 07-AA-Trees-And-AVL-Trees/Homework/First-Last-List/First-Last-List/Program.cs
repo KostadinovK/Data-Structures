@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Wintellect.PowerCollections;
+
+public class Program
+{
+    static void Main(string[] args)
+    {
+        FirstLastList<int> list = new FirstLastList<int>();
+        list.Add(1);
+        list.Add(2);
+        list.Add(3);
+        list.Add(4);
+        Console.WriteLine();
+
+        List<string> words = new List<string>(){ "zz","coffee","milk",};
+        List<string> newList = words.OrderBy(x => x).ToList();
+
+        Console.WriteLine(string.Join(" ",newList));
+    }
+}
