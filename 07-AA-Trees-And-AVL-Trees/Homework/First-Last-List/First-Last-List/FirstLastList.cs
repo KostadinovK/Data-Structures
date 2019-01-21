@@ -27,7 +27,7 @@ public class FirstLastList<T> : IFirstLastList<T> where T : IComparable<T>
     public void Add(T element)
     {
         LinkedListNode<T> node = new LinkedListNode<T>(element);
-        byInsertion.AddLast(element);
+        byInsertion.AddLast(node);
         byAscending.Add(node);
         byDescending.Add(node);
     }
@@ -46,14 +46,14 @@ public class FirstLastList<T> : IFirstLastList<T> where T : IComparable<T>
             throw new ArgumentOutOfRangeException();
         }
 
-        int currentIteration = 0;
-        LinkedListNode<T> current = byInsertion.First;
+        LinkedListNode<T> current = this.byInsertion.First;
 
-        while (currentIteration < count)
+        int iters = 0;
+        while (iters < count)
         {
             yield return current.Value;
             current = current.Next;
-            currentIteration++;
+            iters++;
         }
     }
 
@@ -64,14 +64,14 @@ public class FirstLastList<T> : IFirstLastList<T> where T : IComparable<T>
             throw new ArgumentOutOfRangeException();
         }
 
-        int currentIteration = 0;
-        LinkedListNode<T> current = byInsertion.Last;
+        LinkedListNode<T> current = this.byInsertion.Last;
 
-        while (currentIteration < count)
+        int iters = 0;
+        while (iters < count)
         {
             yield return current.Value;
             current = current.Previous;
-            currentIteration++;
+            iters++;
         }
     }
 
@@ -101,7 +101,7 @@ public class FirstLastList<T> : IFirstLastList<T> where T : IComparable<T>
         LinkedListNode<T> node = new LinkedListNode<T>(element);
         foreach (var item in this.byAscending.Range(node, true, node, true))
         {
-            this.byInsertion.Remove(element);
+            this.byInsertion.Remove(item);
         }
 
         int count = this.byAscending.RemoveAllCopies(node);
