@@ -34,6 +34,7 @@ public class Point2D : IComparable<Point2D>
 
     public int CompareTo(Point2D that)
     {
+        
         if (this.Y < that.Y) return -1;
         if (this.Y > that.Y) return +1;
         if (this.X < that.X) return -1;
