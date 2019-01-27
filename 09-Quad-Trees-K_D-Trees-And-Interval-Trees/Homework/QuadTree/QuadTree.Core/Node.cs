@@ -21,7 +21,7 @@ public class Node<T>
     {
         get
         {
-            throw new NotImplementedException();
+            return this.Items.Count == MaxItemCount && this.Children == null;
         }
     }
 
