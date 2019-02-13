@@ -19,6 +19,13 @@ public class Transaction : IComparable<Transaction>
 
     public int CompareTo(Transaction other)
     {
-        throw new NotImplementedException();
+        int compare = other.Amount.CompareTo(this.Amount);
+
+        if (compare == 0)
+        {
+            compare = this.Id.CompareTo(other.Id);
+        }
+
+        return compare;
     }
 }
