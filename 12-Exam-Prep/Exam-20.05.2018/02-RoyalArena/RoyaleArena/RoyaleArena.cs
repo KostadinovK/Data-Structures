@@ -6,80 +6,164 @@ using Wintellect.PowerCollections;
 
 public class RoyaleArena : IArena
 {
-    public int Count => throw new NotImplementedException();
+    private Dictionary<int, Battlecard> byId;
+    private List<Battlecard> byInsertion;
+    private Dictionary<string, OrderedBag<Battlecard>> byName;
+
+    public RoyaleArena()
+    {
+        byId = new Dictionary<int, Battlecard>();
+        byInsertion = new List<Battlecard>();
+        byName = new Dictionary<string, OrderedBag<Battlecard>>();
+    }
+
+    public int Count => byId.Count;
 
     public void Add(Battlecard card)
     {
-        throw new NotImplementedException();
+        byId.Add(card.Id, card);
+        byInsertion.Add(card);
+        if (!byName.ContainsKey(card.Name))
+        {
+            byName[card.Name] = new OrderedBag<Battlecard>();
+        }
+
+        byName[card.Name].Add(card);
     }
 
-    public void ChangeCardType(int id, CardType type)
+
+    public void RemoveById(int id)
     {
-        throw new NotImplementedException();
+        if (!byId.ContainsKey(id))
+        {
+            throw new InvalidOperationException();
+        }
+
+        Battlecard card = byId[id];
+        byId.Remove(id);
+        byInsertion.Remove(card);
+        byName[card.Name].Remove(card);
     }
 
     public bool Contains(Battlecard card)
     {
-        throw new NotImplementedException();
+        return byId.ContainsKey(card.Id);
     }
 
-    public IEnumerable<Battlecard> FindFirstLeastSwag(int n)
+    public void ChangeCardType(int id, CardType type)
     {
-        throw new NotImplementedException();
-    }
+        if (!byId.ContainsKey(id))
+        {
+            throw new ArgumentException();
+        }
 
-    public IEnumerable<Battlecard> GetAllByNameAndSwag()
-    {
-        throw new NotImplementedException();
-    }
-
-    public IEnumerable<Battlecard> GetAllInSwagRange(double lo, double hi)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IEnumerable<Battlecard> GetByCardType(CardType type)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IEnumerable<Battlecard> GetByCardTypeAndMaximumDamage(CardType type, double damage)
-    {
-        throw new NotImplementedException();
+        byId[id].Type = type;
     }
 
     public Battlecard GetById(int id)
     {
-        throw new NotImplementedException();
+        if (!byId.ContainsKey(id))
+        {
+            throw new InvalidOperationException();
+        }
+
+        return byId[id];
+    }
+
+    public IEnumerable<Battlecard> FindFirstLeastSwag(int n)
+    {
+        if (n > Count)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return byId.Values.OrderBy(x => x.Swag).ThenBy(x => x.Id).Take(n);
+    }
+
+    public IEnumerable<Battlecard> GetAllByNameAndSwag()
+    {
+        foreach (var name in this.byName)
+        {
+            yield return name.Value.GetFirst();
+        }
+    }
+
+    public IEnumerable<Battlecard> GetAllInSwagRange(double lo, double hi)
+    {
+        return byId.Values.Where(x => x.Swag >= lo && x.Swag <= hi).OrderBy(x => x.Swag);
+    }
+
+    public IEnumerable<Battlecard> GetByCardType(CardType type)
+    {
+        var result = byId.Values.Where(x => x.Type == type).OrderBy(x => x);
+
+        if (!result.Any())
+        {
+            throw new InvalidOperationException();
+        }
+
+        return result;
+    }
+
+    public IEnumerable<Battlecard> GetByCardTypeAndMaximumDamage(CardType type, double damage)
+    {
+        var result = byId.Values.Where(x => x.Type == type && x.Damage <= damage).OrderBy(x => x);
+
+        if (!result.Any())
+        {
+            throw new InvalidOperationException();
+        }
+
+        return result;
     }
 
     public IEnumerable<Battlecard> GetByNameAndSwagRange(string name, double lo, double hi)
     {
-        throw new NotImplementedException();
+        var result = byId.Values.Where(x => x.Swag >= lo && x.Swag < hi && x.Name == name)
+            .OrderByDescending(x => x.Swag).ThenBy(x => x.Id);
+
+        if (!result.Any())
+        {
+            throw new InvalidOperationException();
+        }
+
+        return result;
     }
 
     public IEnumerable<Battlecard> GetByNameOrderedBySwagDescending(string name)
     {
-        throw new NotImplementedException();
+        var result = byId.Values.Where(x => x.Name == name).OrderByDescending(x => x.Swag).ThenBy(x => x.Id);
+
+        if (!result.Any())
+        {
+            throw new InvalidOperationException();
+        }
+
+        return result;
     }
 
     public IEnumerable<Battlecard> GetByTypeAndDamageRangeOrderedByDamageThenById(CardType type, int lo, int hi)
     {
-        throw new NotImplementedException();
+        var result = byId.Values.Where(x => x.Type == type && x.Damage > lo && x.Damage < hi).OrderBy(x => x);
+
+        if (!result.Any())
+        {
+            throw new InvalidOperationException();
+        }
+
+        return result;
     }
 
     public IEnumerator<Battlecard> GetEnumerator()
     {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveById(int id)
-    {
-        throw new NotImplementedException();
+        foreach (var card in byInsertion)
+        {
+            yield return card;
+        }
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        throw new NotImplementedException();
+        return this.GetEnumerator();
     }
 }
