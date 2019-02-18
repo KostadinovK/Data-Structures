@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F46C3329-F908-4AD5-B524-BDB7BE119438}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ThreadExecutorTest</RootNamespace>
+    <AssemblyName>ThreadExecutorTest</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Correctness\Test10.cs" />
+    <Compile Include="Correctness\Test11.cs" />
+    <Compile Include="Correctness\Test12.cs" />
+    <Compile Include="Correctness\Test13.cs" />
+    <Compile Include="Correctness\Test14.cs" />
+    <Compile Include="Correctness\Test15.cs" />
+    <Compile Include="Correctness\Test16.cs" />
+    <Compile Include="Correctness\Test17.cs" />
+    <Compile Include="Correctness\Test18.cs" />
+    <Compile Include="Correctness\Test19.cs" />
+    <Compile Include="Correctness\Test20.cs" />
+    <Compile Include="Correctness\Test21.cs" />
+    <Compile Include="Correctness\Test22.cs" />
+    <Compile Include="Correctness\Test23.cs" />
+    <Compile Include="Correctness\Test24.cs" />
+    <Compile Include="Correctness\Test25.cs" />
+    <Compile Include="Correctness\Test26.cs" />
+    <Compile Include="Correctness\Test27.cs" />
+    <Compile Include="Correctness\Test28.cs" />
+    <Compile Include="Correctness\Test29.cs" />
+    <Compile Include="Correctness\Test30.cs" />
+    <Compile Include="Correctness\Test31.cs" />
+    <Compile Include="Correctness\Test4.cs" />
+    <Compile Include="Correctness\Test1.cs" />
+    <Compile Include="Correctness\Test2.cs" />
+    <Compile Include="Correctness\Test3.cs" />
+    <Compile Include="Correctness\Test5.cs" />
+    <Compile Include="Correctness\Test6.cs" />
+    <Compile Include="Correctness\Test7.cs" />
+    <Compile Include="Correctness\Test8.cs" />
+    <Compile Include="Correctness\Test9.cs" />
+    <Compile Include="Performance\Perf1.cs" />
+    <Compile Include="Performance\Perf2.cs" />
+    <Compile Include="Performance\Perf3.cs" />
+    <Compile Include="Performance\Perf4.cs" />
+    <Compile Include="Performance\Perf5.cs" />
+    <Compile Include="Performance\Perf6.cs" />
+    <Compile Include="Performance\Perf7.cs" />
+    <Compile Include="Performance\Perf8.cs" />
+    <Compile Include="Performance\Perf9.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThreadExecutor\ThreadExecutor.csproj">
+      <Project>{d7fcc0bc-6d69-4592-a088-29dc860bbc7f}</Project>
+      <Name>ThreadExecutor</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+</Project>
