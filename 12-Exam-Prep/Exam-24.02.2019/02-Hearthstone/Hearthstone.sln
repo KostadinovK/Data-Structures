@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hearthstone", "Hearthstone\Hearthstone.csproj", "{8D8E84C3-F968-499F-9D92-13D1301CF49C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hearthstone.Tests", "Hearthstone.Tests\Hearthstone.Tests.csproj", "{1C112394-2E9E-46FF-9622-7338DE655730}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D8E84C3-F968-499F-9D92-13D1301CF49C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8E84C3-F968-499F-9D92-13D1301CF49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8E84C3-F968-499F-9D92-13D1301CF49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8E84C3-F968-499F-9D92-13D1301CF49C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C112394-2E9E-46FF-9622-7338DE655730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C112394-2E9E-46FF-9622-7338DE655730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C112394-2E9E-46FF-9622-7338DE655730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C112394-2E9E-46FF-9622-7338DE655730}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {58B836F0-C66C-43F8-9974-21DB069F9201}
+	EndGlobalSection
+EndGlobal
